@@ -44,7 +44,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       appBar: AppBar(
         title: Text("Filtered"),
       ),
-      drawer: MainDrawer(),
+      drawer: MainDrawer(widget.saveFilters, widget.currentFilters),
       body: Center(
         child: Column(
           children: <Widget>[

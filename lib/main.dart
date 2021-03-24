@@ -85,7 +85,7 @@ return _favoriteMeals.any((element) => element.id == id);
       initialRoute: '/',
       // default is '/'
       routes: {
-        '/': (ctx) => TabsScreen(_favoriteMeals),
+        '/': (ctx) => TabsScreen(_favoriteMeals, _setFilters, _filters),
         CategoryScreen.routeName: (ctx) => CategoryScreen(_availableMeals),
         MealDetailsScreen.routeName: (ctx) => MealDetailsScreen(_toggleFavorite, _isMealFavorite),
         FiltersScreen.routeName: (ctx) => FiltersScreen(_setFilters, _filters)

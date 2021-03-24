@@ -2,18 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/screens/filters_screen.dart';
 
 class MainDrawer extends StatefulWidget {
+  final Function saveFilters;
+  final Map<String, bool> currentFilters;
+
+  MainDrawer(this.saveFilters, this.currentFilters);
+
   @override
   _MainDrawerState createState() => _MainDrawerState();
 }
 
 class _MainDrawerState extends State<MainDrawer> {
   var _glutenFree = false;
-
   var _vegetarian = false;
-
   var _vegan = false;
-
   var _lactoseFree = false;
+
+  @override
+  initState() {
+    _glutenFree = widget.currentFilters['gluten'];
+    _vegetarian = widget.currentFilters['vegetarian'];
+    _vegan = widget.currentFilters['vegan'];
+    _lactoseFree = widget.currentFilters['lactose'];
+    super.initState();
+  }
 
   Widget _buildSwitchListTile(
       String title, String description, bool currentValue, Function update) {
@@ -65,35 +76,66 @@ class _MainDrawerState extends State<MainDrawer> {
           buildListTile('Meals', Icons.restaurant, () {
             Navigator.of(context).pushReplacementNamed('/');
           }),
-          buildListTile('Filters', Icons.settings, () {
-            Navigator.of(context).pushReplacementNamed(FiltersScreen.routeName);
-          }),
-              Expanded(
-                  child: ListView(
-                    children: <Widget>[
-                      _buildSwitchListTile('Gluten Free', 'select only gluten free receipts', _glutenFree, (newValue){
-                        setState(() {
-                          _glutenFree = newValue;
-                        });
-                      }),
-                      _buildSwitchListTile('Lactose Free', 'select only Lactose free receipts', _lactoseFree, (newValue){
-                        setState(() {
-                          _lactoseFree = newValue;
-                        });
-                      }),
-                      _buildSwitchListTile('Vegetarian', 'select only vegetarian receipts', _vegetarian, (newValue){
-                        setState(() {
-                          _vegetarian = newValue;
-                        });
-                      }),
-                      _buildSwitchListTile('Vegan', 'select only vegan receipts', _vegan, (newValue){
-                        setState(() {
-                          _vegan = newValue;
-                        });
-                      })
-                    ],
-                  ))
-            ],
+          Expanded(
+            child: ListView(
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    "Filters:",
+                    style: TextStyle(fontSize: 22),
+                  ),
+                ),
+                _buildSwitchListTile(
+                    'Gluten Free',
+                    'select only gluten free receipts',
+                    _glutenFree, (newValue) {
+                  setState(() {
+                    _glutenFree = newValue;
+                  });
+                }),
+                _buildSwitchListTile(
+                    'Lactose Free',
+                    'select only Lactose free receipts',
+                    _lactoseFree, (newValue) {
+                  setState(() {
+                    _lactoseFree = newValue;
+                  });
+                }),
+                _buildSwitchListTile('Vegetarian',
+                    'select only vegetarian receipts', _vegetarian, (newValue) {
+                  setState(() {
+                    _vegetarian = newValue;
+                  });
+                }),
+                _buildSwitchListTile(
+                    'Vegan', 'select only vegan receipts', _vegan, (newValue) {
+                  setState(() {
+                    _vegan = newValue;
+                  });
+                }),
+                ElevatedButton(
+                  onPressed: () {
+                    final selectedFilters = {
+                      'gluten': _glutenFree,
+                      'lactose': _lactoseFree,
+                      'vegan': _vegan,
+                      'vegetarian': _vegetarian
+                    };
+                    widget.saveFilters(selectedFilters);
+                    Navigator.of(context).pushReplacementNamed('/');
+                  },
+                  child: Row(children: <Widget>[
+                    Icon(Icons.filter_alt, size: 20),
+                    Text(
+                      "Apply filter",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ]),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

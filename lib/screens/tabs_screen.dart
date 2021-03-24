@@ -4,12 +4,15 @@ import 'package:meals_app/widgets/main_drawer.dart';
 
 import './favorites_screen.dart';
 import './categories_screen.dart';
+import 'filters_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   final List<Meal> favoriteMeals;
+  final Function saveFilters;
+  final Map<String, bool> currentFilters;
 
 
-  TabsScreen(this.favoriteMeals);
+  TabsScreen(this.favoriteMeals, this.saveFilters, this.currentFilters);
 
   @override
   _TabsScreenState createState() => _TabsScreenState();
@@ -47,7 +50,7 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(_pages[_selectedPageIndex]['title']),
       ),
-      drawer: MainDrawer(),
+      drawer: MainDrawer(widget.saveFilters, widget.currentFilters),
       body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
